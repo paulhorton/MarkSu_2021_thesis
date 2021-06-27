@@ -1,12 +1,3 @@
-# IMSLab thesis template
-
-適用於成功大學資訊工程研究所碩博論文使用的模板，讓需要的同學可以直接 fork 後做使用。
-
-## Author 
-
-* NCKU CSIE - IMSLab (智慧化行動服務實驗室) 的前輩們、及台灣的先進們。
-* Kevin Cyu, kevinbird61@gmail.com (IMSLab 108 級資訊碩)
-
 ## Layout 
 
 > 解釋 layout 中各個資料夾的類別、與各個檔案各自代表的意義與功能。
