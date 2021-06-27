@@ -1,0 +1,27 @@
+\hspace{24pt}
+
+\section{Background}
+In recent years, High-throughput sequencing has become an essential part of Genomics, with its high-throughput, scalability and fast technology for a large number of short-reads, many related research follows.
+
+Most of these NGS-based studies almost inevitably depend on the accurate variants detection and genotype calling of variants from sequence data \cite{nielsen2011genotype}, and due to the high similarities across genomes of the same species, accurate variant calling is a crucial analytic step that almost all downstream analysis and interpretation process rely on. 
+
+Just as NGS technologies, variant calling software and approaches have rapid development over the past 10 years. There have many variant caller and algorithm developed for variant calling, such as GATK  \cite{poplin2018scaling}, Strelka2 \cite{saunders2012strelka}, Freebayes  \cite{garrison2012haplotype}, DeepVariant \cite{poplin2018universal} and etc.
+
+Generally, typical variant calling process include sequencing, quality control, mapping, mark duplicates & sort & merge, followed by variant calling, filtering and annotation \cite{koboldt2020best}.
+
+Although the variant calling pipelines are straightforward in theory, errors are prone to occur when detecting variants from NGS data due to multiple factors such as sequencing error, inaccurate alignment, and low read coverage. Some researches have been published discussing using different variation calls pipelines \cite{bian2018comparing} \cite{chen2019systematic} and with different alignment tools \cite{hwang2015systematic} \cite{zhao2020accuracy}. Research indicates that the results from different variation of the caller to agree only on a small part of the variation \cite{tian2015computational}, and indels(insertion/deletion) are still difficult for any pipeline to handle with [AC15]. However, indels are supremely important as they are considered to have strong impact on cancer\cite{sehn2015insertions} and phenotype \cite{montgomery2013origin}. that is why we need to do accurate assessment of variants.
+
+\section{Motivation}	
+We recently developed a variant evaluator - EAGLE \cite{kuo2018eagle}, a method that uses generative probability models to evaluate the confidence of input VCF file containing a list of candidate variant (For brevity, hereafter we will simply call these “variants”) in sequencing data supporting a given candidate genome, which can help us evaluate the accuracy of mutation points
+
+However, whether it is these variant callers or EAGLE, they all rely on the pileup of alignment tools in the workflow. In variant calling, an intuitive method is to scan the pileup, check the alignment of the reads and look for the difference between the reference genome and the individual being sequenced. This method is indeed the essence of most variant calling methods and can achieve good results in many cases. But the premise is that this method completely relies on correctly mapping the variants containing the sequencing reads to their corresponding positions in the reference genome sequence. 
+
+Since the alignment tools conceptually maps reads to similar reference sequence regions, reads containing variants may not be mapped to the correct region. This effect is called reference bias \cite{sousa2013understanding}. Reference bias is expected to be a source of false negatives (failure to call the true variant), especially for longer indel variants.
+
+Although compared with tools that require a strong dependence on the pileup in the process of variant calling, EAGLE reduces the dependence on the pileup in the computation process through considering a large number of possible read across the genome. But inevitably, there is still a reference bias in theory, this will affect our accuracy in evaluating variant.
+
+\section{Research Objectives}		
+Therefore, in this study, we hope to find out the reads that may be affected by reference bias and lost in the alignment process, and use these reads to improve the accuracy of EAGLE's evaluation of variants.
+
+\section{Research framework}
+The organization structure of this paper is as follows: Chapter One introduces the research background, motivation and research goals. In Chapter 2, we introduce the tool BWA and review our previous research on EAGLE and reference bias. In Chapter 3, we describe the workflow of combining our EAGLE and the method of our system. In Chapter 4, we conducted experiments on simulated data and real data respectively. In Chapter 5, we discuss the results, provide conclusions and future work.

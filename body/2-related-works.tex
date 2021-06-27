@@ -1,0 +1,42 @@
+\hspace{24pt}
+In this chapter, we review the related work in recent years. In section 2.1, we introduce the Burrows-Wheeler Aligner (BWA), a well-known alignment tool. In section 2.2, we introduce our previous research EAGLE, a method for evaluating the degree to which sequencing data supports a given candidate genome variant. In section 2.3, we explain what is reference bias and related solutions.
+\section{Burrows-Wheeler Aligner}
+Burrows-Wheeler Aligner (BWA) \cite{li2009fast} is a tool to align the sequences on selected large reference genome such as human. It consists of three algorithms: BWA-backtrack, BWA-SW \cite{li2010fast} and BWA-MEM\cite{li2013aligning}. Among which BWA-MEM is the latest and generally recommended for high-quality queries as it is faster and more accuracy, basically replace the first two algorithm.
+
+Based on our read data and some previous studies, we believe that BWA-MEM will show better performance [HKL15], and its algorithm is robust to sequencing errors and applicable to a wide range of sequence lengths, so we decided to use BWA-MEM as our main algorithm for finding reads
+
+BWA-MEM first needs to build the FM-index \cite{ferragina2005indexing} for the reference genome with the 'index' command, FM-index compressed substring index based on the Burrows-Wheeler Transform (BWT) \cite{burrows1994block}and suffix array, enables the backward search, generate a fast and efficient index for querying.
+
+Then in the core alignment algorithm, BWA-MEM use seed-and-extend paradigm, and the process can be roughly divided into four steps. First step is seed, seed is found through super maximal exact matches (SMEM). Seconded step is re-seeding, in order to reduce the misalignment caused by missing seeds. Third step is chaining and filtering, chaining the seeds those are collinear and closed each other as a chain, and filter overlapped or short chain. Forth step seed extension, extending the seed in the chain to achieve the final exact match region.
+\section{EAGLE：Explicit Alternative Genome Likelihood Evaluator}
+EAGLE \cite{kuo2018eagle}  is our previous research, based on generative probabilistic model, variant calling evaluator, EAGLE main function is giving individual sequencing data (exome or whole genome sequencing) and a list of candidate variants, will returns a likelihood score of each candidate variants, the concept of EAGLE is in the process of executing variant calling, there will be many uncertain factors, such as the error rate of alignment, low coverage sequencing and error rate of base-calling, etc., and these will affect downstream analysis. And EAGLE handles these possible errors and uncertainties through generative probabilistic model  (Figure \ref{f2-1}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\columnwidth]{body/image/2-1.png}
+    \captionsetup{labelfont=bf}
+    \renewcommand{\baselinestretch}{1.0}
+    \caption[EAGLE model]{EAGLE use generative probabilistic model handle probabilistically.}
+    \label{f2-1}
+\end{figure}
+ 
+
+Overall, the more uncertain the data the more uncertain the explanation, Thus, in principle the likelihood computed by EAGLE can be used rank the reliability of putative variants.
+\section{Reference Bias}
+Sequencing data analysis often begins with aligning reads to a reference genome, but this sequence only contains reference allele at polymorphic sites. \cite{martiniano2020removing}, it will leads to reference bias (Figure \ref{f2-2}): for reads that contain alternate alleles, tend to misalignment or incorrect alignments \cite{chen2021reference}, and due to reference bias, at heterozygous site, the reads containing the reference allele constitute the majority of the reads, these situations can cause false negative or false positive variant calls. \cite{gunther2019presence}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\columnwidth]{body/image/2-2.png}
+    \captionsetup{labelfont=bf}
+    \renewcommand{\baselinestretch}{1.0}
+    \vspace{-1cm}
+    \caption[Reference bias]{Reference bias. Only a small portion of the read containing inserts (dark blue) are mapped to the correct positions during the alignment to the reference genome.}
+    \label{f2-2}
+\end{figure}
+ 
+
+There have some studies discuss how to mitigated reference bias, such as genome graph aligners \cite{garrison2018variation} \cite{li2020design}, or using high-coverage NGS data, and 
+improve the reference genome so that it includes the genomic diversity of the entire population.
+In this paper, we modify the reference sequence to include alternate alleles, and try to find some matching reads to support this hypothetical sequence, then add these reads to the calculation of EAGLE to discuss the impact of this method on reducing reference bias and improve the accuracy of assessing variation.
+
