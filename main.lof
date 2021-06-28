@@ -1,0 +1,46 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces EAGLE model}}{6}{figure.caption.10}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Reference bias}}{7}{figure.caption.11}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Core workflow}}{9}{figure.caption.12}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces VCF format}}{10}{figure.caption.13}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces FASTA format}}{10}{figure.caption.14}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces construct hypothetical sequence}}{11}{figure.caption.15}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces secondary alignment}}{14}{figure.caption.17}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces primary alignment}}{14}{figure.caption.18}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces read-index}}{15}{figure.caption.19}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Filter reads}}{15}{figure.caption.20}%
+\contentsline {figure}{\numberline {3.9}{\ignorespaces pileup}}{16}{figure.caption.21}%
+\contentsline {figure}{\numberline {3.10}{\ignorespaces alignment read}}{17}{figure.caption.22}%
+\contentsline {figure}{\numberline {3.11}{\ignorespaces CIGAR strings}}{18}{figure.caption.23}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Simulate variants}}{20}{figure.caption.24}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Simulate workflow}}{21}{figure.caption.25}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Find variant reads in low coverage}}{23}{figure.caption.29}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Find reference reads in low coverage}}{23}{figure.caption.30}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces low coverage odds change ratio}}{24}{figure.caption.31}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces low coverage variants odds}}{25}{figure.caption.32}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Find variant reads in medium coverage}}{26}{figure.caption.35}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Find reference reads in medium coverage}}{27}{figure.caption.36}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces reference pileup in medium coverage}}{27}{figure.caption.37}%
+\contentsline {figure}{\numberline {4.10}{\ignorespaces medium coverage odds change ratio}}{28}{figure.caption.38}%
+\contentsline {figure}{\numberline {4.11}{\ignorespaces medium coverage variants odds}}{29}{figure.caption.39}%
+\contentsline {figure}{\numberline {4.12}{\ignorespaces find new pileup reads in medium coverage}}{29}{figure.caption.40}%
+\contentsline {figure}{\numberline {4.13}{\ignorespaces Find large amount reads in high coverage}}{31}{figure.caption.43}%
+\contentsline {figure}{\numberline {4.14}{\ignorespaces variant pileup in high coverage}}{31}{figure.caption.44}%
+\contentsline {figure}{\numberline {4.15}{\ignorespaces high coverage odds change ratio}}{32}{figure.caption.45}%
+\contentsline {figure}{\numberline {4.16}{\ignorespaces high coverage variants odds}}{32}{figure.caption.46}%
+\contentsline {figure}{\numberline {4.17}{\ignorespaces SNP match reads}}{33}{figure.caption.47}%
+\contentsline {figure}{\numberline {4.18}{\ignorespaces Figure 4.17 pileup}}{33}{figure.caption.48}%
+\contentsline {figure}{\numberline {4.19}{\ignorespaces SNP worse match reads}}{34}{figure.caption.49}%
+\contentsline {figure}{\numberline {4.20}{\ignorespaces Figure 4.19 pileup}}{34}{figure.caption.50}%
+\contentsline {figure}{\numberline {4.21}{\ignorespaces SNPs odds change ratio}}{34}{figure.caption.51}%
+\contentsline {figure}{\numberline {4.22}{\ignorespaces INDEL match reads}}{35}{figure.caption.52}%
+\contentsline {figure}{\numberline {4.23}{\ignorespaces Figure 4.22 pileup}}{35}{figure.caption.53}%
+\contentsline {figure}{\numberline {4.24}{\ignorespaces INDEL worse match reads}}{36}{figure.caption.54}%
+\contentsline {figure}{\numberline {4.25}{\ignorespaces Figure 4.24 pileup}}{36}{figure.caption.55}%
+\contentsline {figure}{\numberline {4.26}{\ignorespaces INDEL odds change ratio}}{37}{figure.caption.56}%
+\contentsline {figure}{\numberline {4.27}{\ignorespaces Test Environment}}{38}{figure.caption.58}%
+\contentsline {figure}{\numberline {4.28}{\ignorespaces searching time}}{39}{figure.caption.59}%
+\addvspace {10\p@ }
