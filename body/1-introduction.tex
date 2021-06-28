@@ -7,7 +7,7 @@ Most of these NGS-based studies almost inevitably depend on the accurate variant
 
 Just as NGS technologies, variant calling software and approaches have rapid development over the past 10 years. There have many variant caller and algorithm developed for variant calling, such as GATK  \cite{poplin2018scaling}, Strelka2 \cite{saunders2012strelka}, Freebayes  \cite{garrison2012haplotype}, DeepVariant \cite{poplin2018universal} and etc.
 
-Generally, typical variant calling process include sequencing, quality control, mapping, mark duplicates & sort & merge, followed by variant calling, filtering and annotation \cite{koboldt2020best}.
+Generally, typical variant calling process include sequencing, quality control, mapping, mark duplicates \& sort \& merge, followed by variant calling, filtering and annotation \cite{koboldt2020best}.
 
 Although the variant calling pipelines are straightforward in theory, errors are prone to occur when detecting variants from NGS data due to multiple factors such as sequencing error, inaccurate alignment, and low read coverage. Some researches have been published discussing using different variation calls pipelines \cite{bian2018comparing} \cite{chen2019systematic} and with different alignment tools \cite{hwang2015systematic} \cite{zhao2020accuracy}. Research indicates that the results from different variation of the caller to agree only on a small part of the variation \cite{tian2015computational}, and indels(insertion/deletion) are still difficult for any pipeline to handle with [AC15]. However, indels are supremely important as they are considered to have strong impact on cancer\cite{sehn2015insertions} and phenotype \cite{montgomery2013origin}. that is why we need to do accurate assessment of variants.
 

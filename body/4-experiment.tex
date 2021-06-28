@@ -75,7 +75,8 @@ First of all, we can see that for the original eagle found (Table \ref{t4-2} the
         \includegraphics[width=1\textwidth]{body/image/t4-2.png}
     \end{tabular}
     \label{t4-2}
-    \tabfnt{Note: Explain that in the case of low coverage, after we add read, eagle evaluates the number of variants affected.}
+    %\tabfnt
+    {Note: Explain that in the case of low coverage, after we add read, eagle evaluates the number of variants affected.}
 \end{table}
 
 Next, let’s take a look at the changes after adding our method. We can see that eagle prefers that the position does not contain variants in the original judgment, but in most cases (82\%), when we find some reads that contain variants, we can help eagle judge whether the position contains variants. (Table \ref{t4-3})
@@ -161,7 +162,8 @@ Then see the odds calculated by eagle after we find the read (Figure \ref{f4-6})
         \includegraphics[width=1\textwidth]{body/image/t4-4.png}
     \end{tabular}
     \label{t4-4}
-    \tabfnt{Note: Explain that in the case of medium coverage, after we add read, eagle evaluates the number of variants affected.}
+    %\tabfnt
+    {Note: Explain that in the case of medium coverage, after we add read, eagle evaluates the number of variants affected.}
 \end{table}
 \end{center}
 
@@ -260,7 +262,8 @@ In this case, EAGLE can get more correct conclusions, that is, the position does
         \includegraphics[width=1\textwidth]{body/image/t4-6.png}
     \end{tabular}
     \label{t4-6}
-    \tabfnt{Note: Explain that in the case of high coverage, after we add read, eagle evaluates the number of variants affected.}
+    %\tabfnt
+    {Note: Explain that in the case of high coverage, after we add read, eagle evaluates the number of variants affected.}
 \end{table}
 
 
@@ -275,7 +278,9 @@ Basically, in this case, we will observe results that are very similar to medium
         \includegraphics[width=1\textwidth]{body/image/t4-7.png}
     \end{tabular}
     \label{t4-7}
-    \tabfnt{Note: Explain that in the case of high coverage, after we add read, eagle evaluates the number of variants affected.}
+    
+    %\tabfnt
+    {Note: Explain that in the case of high coverage, after we add read, eagle evaluates the number of variants affected.}
 \end{table}
 
 Interestingly, here we observe that the coverage rate is twice as high as that of the medium coverage, EAGLE initially judged that the position does not contain variation, but also through our method, we can complete more corrections than the medium coverage case. There are nearly 97\% of variants in Table \ref{t4-7} have been changed to the correct situation. (Fig \ref{f4-13},\ref{f4-14} are some examples)
