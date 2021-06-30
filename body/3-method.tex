@@ -5,9 +5,9 @@ The red area in Figure \ref{f3-1} shows our implementation of the core workflow 
 We can roughly divide our workflow into the following five parts:
 \begin{enumerate}
     \item According variant in VCF files and reference genome to create our hypothetical sequence, this sequence is important because including individual differences.
-    \item Then we need to convert our FASTQ format read to FASTA format to build the FM-index of read, (For brevity, hereafter we will simply call these “read-index”).
+    \item Then we need to convert our FASTQ format read to FASTA format to build the FM-index of read, (For brevity, hereafter we will simply call these 'read-index'
     \item Use BWA and read-index to find the read that include variant, and then check if it in already exists in the pileup. (Multiple alignment of reads to the genome)
-    \item For read that does not exist in the pileup, create read’s alignment information mapped against reference sequences
+    \item For read that does not exist in the pileup, create read's alignment information mapped against reference sequences 
     \item Add read and alignment information in the pileup, improve the eagle calculate.
 
 \end{enumerate}
@@ -83,7 +83,7 @@ But what if we construct index for read and used our hypothetical sequence to qu
 \end{enumerate}
 
 \begin{flushleft}
-Let’s take an example and some assumptions :
+Let's take an example and some assumptions :
 \end{flushleft}
 
 In general situations, we need to create an index for each hypothetical and do a complete read search, it will probably take time:
@@ -128,7 +128,7 @@ In previous section, we have introduced how BWA-MEM work, and in this section, w
 
 BWA is an open-source software. Fortunately, we can directly use the functions of BWA-MEM and modify part of the code according to EAGLE needs to make it meet our read-index search requirements. Basically, we will use seed alignment based on super maximal exact matching to search for our hypothetical sequence.
 
-The following will describe the changes we made to our needs. First of all, for the original BWA-MEM, a read will have only one best matching position, and the others will be marked as secondary (or no primary) (Figure \ref{f3-5}), because for BWA only need an optimal alignment, but in our opinion, we should consider all matching reads as primary if it includes the variants (Figure \ref{f3-6}). 
+The following will describe the changes we made meet to our needs. First of all, for the original BWA-MEM, a read will have only one best matching position, and the others will be marked as secondary (or no primary) (Figure \ref{f3-5}), but for our purposes we simply want to collect all reasonable matches (Figure \ref{f3-6}).
 
 \vspace{1cm}
 \begin{figure}[H]
@@ -148,7 +148,7 @@ The following will describe the changes we made to our needs. First of all, for 
     \captionsetup{labelfont=bf}
     \renewcommand{\baselinestretch}{1.0}
     \vspace{-1cm}
-    \caption[primary alignment]{all alignment should consider as primary alignment.}
+    \caption[primary alignment]{The read index is used to find reads matching a hypothetical genome sequence.  BWA marks some matches as primary, etc., but we treat them all the same.}
     \label{f3-6}
 \end{figure}
 
@@ -206,7 +206,7 @@ This problem can be divided into 4 cases: (Figure 3-10)
     \captionsetup{labelfont=bf}
     \renewcommand{\baselinestretch}{1.0}
     \vspace{-1cm}
-    \caption[alignment read]{Four cases deal read with reference position.}
+    \caption[alignment read]{Four cases related read to variant.  A read may overlap with part of a variant (left or right side), may completely include a variant, or be included by the variant.}
     \label{f3-10}
 \end{figure}
 
@@ -219,7 +219,7 @@ This problem can be divided into 4 cases: (Figure 3-10)
 
 For first case and third case we can just directly get the position in reference, and forth case we use the position of variant. A different example is second case, in this case, we need to use the end of the region to push-back the position.
 
-In the last step, we already have read mapping position on reference genome, so that we can create read alignment information. Most of them are nothing special and will not change as we change the alignment position, except for CIGAR string, we need to convert it from hypothetical sequence’s alignment information mapped against read to read’s alignment information mapped against reference sequences (Figure \ref{f3-11}). we use small function to constructed CIGAR string for our read.
+In the last step, we already have read mapping position on reference genome, so that we can create read alignment information. Most of them are nothing special and will not change as we change the alignment position, except for CIGAR string, we need to convert it from hypothetical sequence's alignment information mapped against read to read's alignment information mapped against reference sequences (Figure \ref{f3-11}). we use small function to constructed CIGAR string for our read.
 
 \vspace{1cm}
 \begin{figure}[H]
