@@ -1,14 +1,14 @@
 \hspace{24pt}
-In this chapter, we will introduce the method we implemented on EAGLE to reduce the reference bias.Explain in detail how we create our hypothetical sequence based on the variant and how to quickly search through FM-index to obtain those missing reads, and finally add these reads to the pileup that we eagle considers.
+In this chapter, we will introduce the method we implemented on EAGLE to reduce the reference bias. Explain in detail how we create our hypothetical sequence based on the variant and how to quickly search through FM-index to obtain those missing reads, and finally add these reads to the pileup that EAGLE considers.
 \section{Overview}
 The red area in Figure \ref{f3-1} shows our implementation of the core workflow of reducing reference bias on EAGLE, and the whole  Figure \ref{f3-1} is our complete workflow after combining EAGLE. 
 We can roughly divide our workflow into the following five parts:
 \begin{enumerate}
-    \item According variant in VCF files and reference genome to create our hypothetical sequence, this sequence is important because including individual differences.
-    \item Then we need to convert our FASTQ format read to FASTA format to build the FM-index of read, (For brevity, hereafter we will simply call these 'read-index'
-    \item Use BWA and read-index to find the read that include variant, and then check if it in already exists in the pileup. (Multiple alignment of reads to the genome)
+    \item According to variant in VCF files and reference genome to create our hypothetical sequence, this sequence is important because including individual differences.
+    \item Then we need to convert our FASTQ format read into FASTA format to build the FM-index of read, (For brevity, hereafter we will simply call these 'read-index')
+    \item Use BWA and read-index to find the read that includes variant, and then check if it already exists in the pileup. (Multiple alignment of reads to the genome)
     \item For read that does not exist in the pileup, create read's alignment information mapped against reference sequences 
-    \item Add read and alignment information in the pileup, improve the eagle calculate.
+    \item Add read and alignment information in the pileup, improve the EAGLE calculation.
 
 \end{enumerate}
 
@@ -22,7 +22,7 @@ We can roughly divide our workflow into the following five parts:
 \end{figure}
 
 \section{Hypothetical Sequence}
-To reduce the impact of reference bias, the first step we need to construct hypothetical sequence, before construct hypothetical sequence we need VCF file and FASTA file, VCF is the standard file format for storing variation data, used by most variant callers (Figure \ref{f3-2}), and FASTA is reference genome format (Figure \ref{f3-3}), it is a text-based format for representing either nucleotide sequences or peptide sequences.
+To reduce the impact of reference bias, the first step we need to construct hypothetical sequence. Before constructing hypothetical sequence we need VCF file and FASTA file. VCF is the standard file format for storing variation data, used by most variant callers (Figure \ref{f3-2}). FASTA is reference genome format (Figure \ref{f3-3}), and it is a text-based format for representing either nucleotide sequences or peptide sequences.
 
 \begin{figure}[H]
     \centering
@@ -44,11 +44,11 @@ To reduce the impact of reference bias, the first step we need to construct hypo
     \label{f3-3}
 \end{figure}
 
-One of the reasons for reference bias is that the reference genome cannot contain individual differences. And our hypothetical sequence is a sequence that combines reference genome and variant, simulate the occur of mutation of the reference sequence by combining variant, make it includes individual differences. So, we will base on the information of each variant in the VCF file, including variant position (POS), chromosome name (CHROM), sequence before mutation (REF), and sequence after mutation (ALT) to generate a hypothetical sequence. 
+One of the reasons for reference bias is that the reference genome cannot contain individual differences. And our hypothetical sequence is a sequence that combines reference genome and variant. Because we simulate the occur of mutation of the reference sequence by combining variant, it includes individual differences. Thus, base on the information of each variant in the VCF file, including variant position (POS), chromosome name (CHROM), sequence before mutation (REF), and sequence after mutation (ALT), we generate a hypothetical sequence. 
 
-For each hypothetical sequence, we will according to the variant position, replace sequence before mutation (REF) to sequence after mutation (ALT), at the same time we will extract the reference genome part front and back in this region, and the length will be the length of a read, The length of this area is long enough to include all the reads we are interested in and also include individual differences. Figure  \ref{f3-4} illustrates in detail how we generate a hypothetical sequence based on different types of variants.
+For each hypothetical sequence, according to the variant position, we replace sequence before mutation (REF) to sequence after mutation (ALT). At the same time we will extract the reference genome part front and back in this region, and the length will be the length of a read. The length of this area is long enough to get all the reads we are interested in and also includes individual differences. Figure  \ref{f3-4} illustrates in detail how we generate a hypothetical sequence based on different types of variants.
 
-We hope to find a read that matches our hypothetical sequence in the FASTQ file to achieve the effect of reducing the reference bias
+We hope to find a read that matches our hypothetical sequence in the FASTQ file to achieve the effect of reducing the reference bias.
 \vspace{1cm}
 \begin{figure}[H]
     \centering
@@ -62,19 +62,19 @@ We hope to find a read that matches our hypothetical sequence in the FASTQ file 
 
 \section{Read-index}
 
-Next is an important step for us to find the read that matches our hypothetical sequence. But if we follow the practice of BWA-MEM, looking for read in FASTQ file will cost us a lot of time. 
+Following is an important step for us to find the read that matches our hypothetical sequence. However, if we follow the practice of BWA-MEM, looking for read in FASTQ file, it will cost us a lot of time. 
 
-First for general practice, hypothetical sequence is the reference genome, and we need to map reads on this, just like alignment. so we need to construct index for each hypothetical sequence and then query all the read in FASTQ file. As we knew that build BWT index need $O(nlogn)$  (n is reference length)to constructed, and query will be $O(m)$ (m is read length)for each read.
+First of general practice, hypothetical sequence is the reference genome, and we need to map reads on this, just like alignment. Therefore we need to construct index for each hypothetical sequence and then query all the read in FASTQ file. As we mentioned above, we  need $O(nlogn)$  (n is reference length) to construct BWT index, and querying will cost $O(m)$ (m is read length) for each read.
 \begin{flushleft}
-In general situation, Time spent each query as follows: 
+In general situation, time spend each query as follows: 
 \end{flushleft} 
 \begin{center}
     $O(m)+O(nlogn)$
 \end{center}  
 
-It is indeed a very efficient method in normal times. It only needs to query once for each read, because all reads only need to be aligned to one reference genome sequence. But in our situation, our hypothetical sequence (reference) will not only have one. For each variant we will establish a hypothetical sequence, so if we follow the traditional method, we need to search all the reads every time, our speed will be very slow.
+It is indeed a very efficient method in normal times. It only needs to query once for each read, because all reads only need to be aligned to one reference genome sequence. But in our situation, our hypothetical sequence (reference) will not only have one. For each variant we will establish a hypothetical sequence, so if we follow the traditional method, we need to search all the reads every time. Our speed will be very slow.
 
-But what if we construct index for read and used our hypothetical sequence to query?
+How the situation will be if we construct index for read and used our hypothetical sequence to query?
 \begin{enumerate}
 {
     \item We just need to build index once a time.
@@ -86,12 +86,12 @@ But what if we construct index for read and used our hypothetical sequence to qu
 Let's take an example and some assumptions :
 \end{flushleft}
 
-In general situations, we need to create an index for each hypothetical and do a complete read search, it will probably take time:
+In general situations, we need to create an index for each hypothetical and do a complete read search. It will probably take time:
 \begin{center}
     $hypothetical\enspace amount\enspace*\enspace(\enspace index\enspace hypothetical\enspace sequence\enspace+\enspace query\enspace all\enspace reads)$
 \end{center}  
 \begin{flushleft}
-Because the hypothetical sequence is very short compared to all reads, the time of its index can be ignored, then its time will probably be:
+Because the hypothetical sequence is very short compared to all reads, the time of its index can be ignored. Then its time will probably be:
 \end{flushleft}
 \begin{center}
     $hypothetical\enspace amount\enspace*\enspace query\enspace all\enspace reads$
@@ -104,13 +104,13 @@ And through our way of creating a read index, the time will probably be:
     $index\enspace all\enspace reads\enspace+\enspace(\enspace hypothetical\enspace amount\enspace*\enspace query\enspace hypothetical\enspace sequence)$
 \end{center}  
 \begin{flushleft}
-Also because the hypothetical sequence is very short, we can ignore its query time, then our time will probably be:
+Also because the hypothetical sequence is very short, we can ignore its query time. Then our time will probably be:
 \end{flushleft}
 \begin{center}
     $index\enspace all\enspace reads\enspace+\enspace(\enspace hypothetical\enspace amount\enspace quickly\enspace queries)$
 \end{center}  
 
-According to the above results, we decided to index our read to generate the read -index, which helps us quickly find the matching read. Before indexing, we need to remove some information in read file to convert FASTQ format to FASTA format. This is very simple like (Table \ref{t3-1}) then we can directly call BWA index function to construct read-index.
+According to the above results, we decided to index our read to generate the read -index, which helps us quickly find the matching read. Before indexing, we need to remove some information in read file to convert FASTQ format to FASTA format. This is very simple as we describe in Table \ref{t3-1}, then we can directly call BWA index function to construct read-index.
 
 \vspace{1cm}
 \begin{table}[h]
@@ -233,7 +233,3 @@ In the last step, we already have read mapping position on reference genome, so 
 \end{figure}
 
 Go through all the steps we can add read to the pileup for eagle to calculate likelihood.
-
-
-
-
