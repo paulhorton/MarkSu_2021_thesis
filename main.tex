@@ -6,17 +6,15 @@
 % 2. http://code.google.com/p/ntuthesis/
 %    (臺大碩士、博士論文的Latex模板)
 %%
-\documentclass[12pt,p a4paper]{class/ncku_class}
+\documentclass[12pt,a4paper]{ncku_class}
 
 \usepackage{CJKutf8}  %%% ZZZ %%% macro for Chinese/Japanese/Korean processing
 \usepackage{CJKnumb} %%% ZZZ %%% for Chinese numbering capability
 \usepackage[nospace]{cite}  % for smart citation
 \usepackage{geometry}  % for easy margin settings
-\usepackage{class/ncku_style} % 自定義nckuee.sty // cbj
-\usepackage{booktabs}
-\usepackage{caption}
-\usepackage{multirow}
-\usepackage{soul}
+\usepackage{ncku_style} % 自定義nckuee.sty // cbj
+
+
 % 插圖套件 graphicx
 % 使用者工作流程是用 pdftex 還是 latex + dvipdfmx?
 % 視情況而有不同的參數
@@ -64,7 +62,7 @@
 % 如果不需要任何浮水印，則請把下列介於 >>> 與 <<< 之間
 % 的文字行關掉 (行首加上百分號)
 %% 浮水印 >>>
-\input{header/ncku_watermark.tex}
+%%\input{header/ncku_watermark.tex}
 %% <<< 浮水印
 % 如需額外的頁楣 (header) 或 footer，請在 header/header_footer.tex 裡依例修改
 % 它的預設內容是都關掉，可依需要打開
@@ -74,17 +72,12 @@
 %%%% 非必要的套件，但很實用
 \usepackage{amsmath} % 各式 AMS 數學功能
 \usepackage{amssymb} % 各式 AMS 數學符號
-\usepackage{mathrsfs} %草寫體數學符號，在數學模式裡用 \mathscr{E} 得草寫 E
 \usepackage{listings} % 程式列表套件
 
-%%%%%%%%%%%%%%
-% // 可自行增加所需套件 // cbj
-%\usepackage{subfig}
-%%%%%%%%%%%%%%
-\usepackage{subfigure}
+
 \usepackage{graphicx} \graphicspath{{images/}}
-\usepackage{psfrag} % text replacement in figure
 \usepackage{amsmath}
+\usepackage{relsize}
 \usepackage{bm}
 \usepackage{mathtools}
 \usepackage{hyperref}
@@ -98,15 +91,10 @@ urlcolor=blue%
 %%\usepackage{url}
 %\usepackage{rotating} % table rotation
 %\usepackage{amssymb}
-\usepackage{array}
-\usepackage{threeparttable} % table note
-\usepackage{multirow} % newline on the tabular of a table.
 %%%%%%%%%%%%%%
 %---
 \usepackage{tabularx}
-\usepackage{url}
 \usepackage[usenames,dvipsnames]{xcolor}
-\usepackage{pgf}
 \usepackage{tikz}
 % \usetikzlibrary{arrows,automata,positioning}
 \usetikzlibrary{arrows,shapes}
@@ -197,6 +185,13 @@ commentstyle=\upshape,% 預設是斜體字，會影響註解裏的英文，改�
 %%\renewcommand{\enMonth}{June}  %英文月份
 %%\renewcommand{\oralDate}{101 年 6 月 19 日}  %口試日期
 
+\usepackage{caption}
+\captionsetup{
+labelfont=bf,
+font=small,
+}
+
+
 %
 \begin{document}
 \begin{CJK}{UTF8}{bkai}   %%% ZZZ %%%  <<< 在這裡更改預設中文字型、編碼 // 設定標楷體字型 // cbj
@@ -234,6 +229,9 @@ commentstyle=\upshape,% 預設是斜體字，會影響註解裏的英文，改�
 %  1&2定義於nckuee.sty ; 3&4&7放置在資料夾 frontpages\目錄下)
 %====================
 \input{frontpages/ncku_frontpages.tex}
+\clearpage % to make sure all CJK characters are processed
+\end{CJK}  %%% ZZZ %%%
+
 %====================
 %  Main Pages // cbj
 %====================
@@ -250,7 +248,4 @@ commentstyle=\upshape,% 預設是斜體字，會影響註解裏的英文，改�
 %%% 自傳
 %\input{back/back_vita.tex}
 
-\clearpage % to make sure all CJK characters are processed
-\end{CJK}  %%% ZZZ %%%
 \end{document}
-
