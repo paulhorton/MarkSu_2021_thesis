@@ -22,7 +22,7 @@ In order to carefully evaluate the effect of our modifications to EAGLE and veri
 \label{simulate_variants}
 \end{figure}
 
-Then we will use BWA, following the traditional approach, and do the alignment again. Use the re-alignment step to simulate the occurrence of reference bias, because we modified the reference, when re-alignment, the pileup at the original position will have some reads affected by the reference bias, and these affected reads will be misaligned or perhaps mapped elsewhere. After generating the files needed by EAGLE, we can start our experiment, and the whole experiment process is outlined in Figure~\ref{simulation_workflow}.
+Then we will use BWA, following the traditional approach, and do the alignment again. Use the re-alignment step to simulate the occurrence of reference bias, because we modified the reference, when re-aligning, the pileup at the original position will have some reads affected by the change we made to the reference, and these affected reads will be misaligned or perhaps mapped elsewhere. After generating the files needed by EAGLE, we can start our experiment.  The entire experiment process is outlined in Figure~\ref{simulation_workflow}.
 
 \begin{figure}[ht]
 \vspace{1em}
@@ -116,7 +116,7 @@ Next, let’s take a look at the changes after adding our method. We can see tha
 \caption[Changes in the number of variants with lower pile-up read depth]{Changes in the number of variants with lower pile-up read depth}
 \begin{tabular}{|l|c|c|c|c|c|r|}
 \hline
-\diagbox[dir=NW]{\textbf{$P[Alt]/P[REF] < 1$}}{\textbf{Indel length}} &
+\diagbox[dir=NW,width=12em]{$\frac{\mathbf{P}[\text{Alt}]}{\mathbf{P}[\text{REF}]} < 1$}{\textbf{Indel length}} &
 \textbf{1--10} &     \textbf{11--20} &    \textbf{21--30} &    \textbf{31--40} &    \textbf{41--50} &    \textbf{Total}\\
 \hline
 \rowcolor{lightgray}
@@ -125,7 +125,6 @@ Next, let’s take a look at the changes after adding our method. We can see tha
 \textbf{After} &   2&     1&     0&    1&   0&    4 \\
 \hline
 \end{tabular}
-
 \label{tab:low-variants-change}
 \end{table}
 
