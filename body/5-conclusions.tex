@@ -1,13 +1,13 @@
 \hspace{24pt}
 
 \section{Conclusion}
-In order to try to reduce the influence of reference bias and improve the accuracy of EAGLE for evaluating variants, we have expanded the function of EAGLE. Before EAGLE calculation, by generating hypothetical sequences that binding variants and reference sequences, and create a read-index to achieve quick search, find out those misalignment or incorrect reads, and finally add it to pileup.
+In order to reduce the influence of reference bias and improve the accuracy of EAGLE for evaluating variants, we have expanded the function of EAGLE.  While the original version of EAGLE relies on a standard read mapping (pile-up) to find reads relevant to a candidate variant, we use a read-index to find additional reads which match the variant genome sequence (but not necessarily match the reference genome sequence).  We modified EAGLE to allow us to add these reads to the pile-up before EAGLE evaluates the candidate variant.
 
-After this series of steps, we conducted an experiment that simulates the real situation to verify our method. The experimental results of our simulation show that our method can effectively reduce the influence of reference bias, and in a longer indel The effect is particularly significant. At the same time, we can work normally in any read coverage situation.
+After this series of steps, we conducted an experiment that simulates the real situation to verify our method. The experimental results of our simulation show that our method can effectively reduce the influence of reference bias, and for longer indels the effect is particularly significant. At the same time, our modified EAGLE we can work normally in any read coverage situation.
 
-We are also testing in the real data set dbSNP, we can get the same good results as before, but the effect on SNPs is relatively limited.The reason why the method we implemented can be successfully applied to EAGLE is mainly because the EAGLE probability model is mainly used read to estimate the likelihood of each variant, and we can find many reads that are affected by reference bias and are discarded. We only need to increase the establishment of read-index and a little search time to eliminate the influence of reference bias.
+We also examined dbSNP, a real data set of candidate variants.  We observed good results as before, although the effect on SNPs calls is relatively limited.  Our implementation is well integrated into EAGLE and can reduce reference bias by missing fewer relevant reads.  Our use of a read-index requires only a modest time overhead.  The additional memory required is significant, but still manageable.
 
 \section{Future Work}
-In future research, I think we can think about how to establish a more perfect hypothetical sequence. At present, our method is to establish our hypothetical sequence for a single mutation, but we have found that adjacent mutations are prone to occur. Maybe we can consider neighboring variants. Different permutations and combinations generate hypothesis sequences to improve the effect of our method, but it may consume a lot of time.
-
-The possibility of combining good alignment tools by creating better hypotheses is worthy of further investigation.
+This thesis focused on comparing the results of EAGLE before and after using a read-index to consider more reads.
+As future work, our EAGLE with read-index method should also be compared to other variant candidate evaluation methods on
+more comprehensive benchmark datasets.

@@ -1,5 +1,5 @@
 \hspace{24pt}
-In this chapter, we will introduce the method we added to EAGLE to reduce reference bias; explain in detail how we create our hypothetical sequence based on the variant and how to quickly search through an FM-index to obtain those missing reads, and finally add these reads to the pileup that EAGLE considers.
+In this chapter, we will introduce the method we added to EAGLE to reduce reference bias; explain in detail how we create our hypothetical sequence based on the variant and how to quickly search through an FM-index to obtain those missing reads, and finally add these reads to the pile-up that EAGLE considers.
 \section{Overview}
 The red area in Figure~\ref{core-workflow} shows our implementation of the core workflow of reducing reference bias on EAGLE, and the whole Figure \ref{core-workflow} is our complete workflow after combining EAGLE. 
 We can roughly divide our workflow into the following five parts:
@@ -7,9 +7,9 @@ We can roughly divide our workflow into the following five parts:
 \begin{enumerate}
 \item Combine variant information in a VCF file and the reference genome to create a hypothetical sequence which includes individual differences.
 \item Build a \textit{read-index}, an FM-index of the read sequences.
-\item Use BWA and the read-index to find the reads that match the variant, and then check if they already exists in the pileup.
-\item For any reads not found in the pileup, create that read's alignment information mapped against reference sequences 
-\item Add read and alignment information to the pileup, to improve the EAGLE calculation.
+\item Use BWA and the read-index to find the reads that match the variant, and then check if they already exists in the pile-up.
+\item For any reads not found in the pile-up, create that read's alignment information mapped against reference sequences 
+\item Add read and alignment information to the pile-up, to improve the EAGLE calculation.
 \end{enumerate}
 
 \begin{figure}[H]
@@ -118,16 +118,16 @@ Line 4  & & quality value\\
 \hline
 \rowcolor{lightgray}
 \multicolumn{2}{|c|}
-{\cellcolor{gray}} & NT\_113878.1 chrom1 & @SEQ\_ID \\
+{\cellcolor{gray}} & $>$NT\_113878.1 chrom1 & @SEQ\_ID \\
 \rowcolor{lightgray}
 \multicolumn{2}{|c|}
-{\cellcolor{gray}} & GATAGTAGTTGCAGCAGGCTAGCTA & GATAGTAGTTGCAGCAGGCTAGCTA   \\
+{\cellcolor{gray}} & \footnotesize{\texttt{GATAGTAGTTGCAGCAGGCTAGCTA}} & \footnotesize{\texttt{GATAGTAGTTGCAGCAGGCTAGCTA}} \\
 \rowcolor{lightgray}
 \multicolumn{2}{|c|}
 {\cellcolor{gray}} & & +    \\
 \rowcolor{gray}
 \multicolumn{2}{|c|}
-{\multirow{-4}{*}{\color{white} \textbf{example}}} &\cellcolor{lightgray} &\cellcolor{lightgray} ???DB+=2C\textgreater{}??E;\textgreater{}C\textgreater{}??EEEFF;+= \\ \hline
+{\multirow{-4}{*}{\color{white} \textbf{example}}} &\cellcolor{lightgray} &\cellcolor{lightgray}\footnotesize{\verb|???DB+=2C>??E;>C>??EEEFF;|} \\ \hline
 \end{tabular}
 }
 \label{tab:FastaToFastq}
@@ -162,7 +162,7 @@ Then we use BWA-MEM to search for our hypothetical sequence using seed alignment
 \label{read-index}
 \end{figure}
 
-Through the index of hypothetical sequence, we can check whether it contains the variant, if not, we will filter it, as Figure \ref{filter-reads} shows.  At the end of this step, we can obtain a set of reads meeting our requirements, and then add them to the pileup.
+Through the index of hypothetical sequence, we can check whether it contains the variant, if not, we will filter it, as Figure \ref{filter-reads} shows.  At the end of this step, we can obtain a set of reads meeting our requirements, and then add them to the pile-up.
 
 \begin{figure}[H]
 \includegraphics[width=1\columnwidth]{body/image/filter-reads.png}
@@ -170,22 +170,22 @@ Through the index of hypothetical sequence, we can check whether it contains the
 \label{filter-reads}
 \end{figure}
 
-\section{Integrating new reads into the pileup}
-In the last step, we need to compare all the read sets obtained in the previous step with the reads in the pileup. What is the pileup?
-We start with a standard read mapping result stored in BAM file format.  We can observe that reads is mapped to a position in the reference genome. Many reads may align to the same region, and this ``pile'' of reads is called the pileup. Our final goal is to find reads that overlap with the same variant position but do not exist in the BAM file, (Figure \ref{exp-pileup} shows the pileup reads which overlap on a variant position.)
+\section{Integrating new reads into the pile-up}
+In the last step, we need to compare all the read sets obtained in the previous step with the reads in the pile-up. What is the pile-up?
+We start with a standard read mapping result stored in BAM file format.  We can observe that reads is mapped to a position in the reference genome. Many reads may align to the same region, and this ``pile'' of reads is called the pile-up. Our final goal is to find reads that overlap with the same variant position but do not exist in the BAM file, (Figure \ref{exp-pile-up} shows the pile-up reads which overlap on a variant position.)
 
 \begin{figure}[H]
 \vspace*{1em}
 \includegraphics[width=1\columnwidth]{body/image/exp-pileup.png}
-\caption[pileup]{pileup at the variant position.}
-\label{exp-pileup}
+\caption[pile-up]{pile-up at the variant position.}
+\label{exp-pile-up}
 \end{figure}
 
-We can get the pileup from a BAM file quickly through the utility library \texttt{HTSlib}, and then compare the read set with these pileup reads, if the read does not exist in the pileup, it means that we have got the results we want.  The next step for our work is to convert this read, and use the two sets of index obtained in the previous step to generate some essential information that will be needed in our eagle calculation, including SAM flag and CIGAR string, SAM flag is represents the mapping status of this read and the CIGAR string encodes the detailed alignment of the read. We will explain how we get CIGAR string through two sets of indexes.
+We can get the pile-up from a BAM file quickly through the utility library \texttt{HTSlib}, and then compare the read set with these pile-up reads, if the read does not exist in the pile-up, it means that we have got the results we want.  The next step for our work is to convert this read, and use the two sets of index obtained in the previous step to generate some essential information that will be needed in our eagle calculation, including SAM flag and CIGAR string, SAM flag is represents the mapping status of this read and the CIGAR string encodes the detailed alignment of the read. We will explain how we get CIGAR string through two sets of indexes.
 
 If we get the SAM flag and CIGAR directly through our two sets of indexes, what we get is the alignment information of hypothetical sequence mapping to read, like previous Figure \ref{read-index} shows, but what EAGLE needs is the alignment information of read mapping to reference sequence. So we need do some processing on the match positions.
 
-First of all, from the position of matches to in read-index, we can directly obtain matching reads.  The other match position is relative to the start and end of our hypothetical sequence --- a length $2\ell$ sequence containing a candidate variant in the middle.  We need to convert positions in this sequence into positions in the reference genome to help us add the read to the pileup in such as way that EAGLE can consider it when evaluating that variant.
+First of all, from the position of matches to in read-index, we can directly obtain matching reads.  The other match position is relative to the start and end of our hypothetical sequence --- a length $2\ell$ sequence containing a candidate variant in the middle.  We need to convert positions in this sequence into positions in the reference genome to help us add the read to the pile-up in such as way that EAGLE can consider it when evaluating that variant.
 
 \noindent
 This problem can be divided into 4 cases(Figure \ref{alignment-read}):
@@ -217,4 +217,4 @@ In the last step, we already have read mapping position in the reference genome,
 \label{convert-CIGAR}
 \end{figure}
 
-Through these steps we can add read to the pileup for eagle to calculate likelihood.
+Through these steps we can add read to the pile-up for eagle to calculate likelihood.
