@@ -33,11 +33,10 @@ Then we will use BWA, following the traditional approach, and do the read mappin
 
 In order to analyze the affect of read depth on our results, we used SAMtools to check the original reference pile-up read depth, and divide genome positions into three categories of pileup read depth: 5--20x, 20--40x and \textgreater40x (Table~\ref{tab:simulate-amount}).
 
-\vspace{0.5cm}
 \begin{table}[ht]
 \center
 \caption[total simulate indels amount]{total simulate indels amount}
-\vspace{-0.5cm}
+\vspace{-1em}
 \begin{tabular}{|l|c|c|c|}
 \hline
 \rowcolor{lightgray}
@@ -71,11 +70,11 @@ Our evaluation is based on the log odds ratio output of EAGLE of each variant $v
 \section{Case 1: Low read depth}
 The first two rows of Table \ref{tab:low-variants} show how often the EAGLE likelihood ratio changes after adding any new reads from our read index into consideration.
 We can see that in the case of low read depth, since only a small number of reads are mappable at all (even against the original reference sequence), once there is a reference bias (simulated by mapping against the doctored reference), EAGLE's evaluation can easily be severely affected.  As expected, you can also see that the longer the length of indels, the more serious the impact.
-\vspace{0.5cm}
+
 \begin{table}[ht]
 \center
 \caption[low read depth variants]{low read depth variants}
-\vspace{-0.5cm}
+\vspace{-1em}
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|r|}
 \hline
 \textbf{Indel Length} & 
@@ -130,24 +129,27 @@ Next, let’s take a look at the changes after adding our read-index based metho
 
 We checked the cases that changed after we found the read, and we found that most of the examples were as we predicted, and we were able to find reads that were misaligned due to reference bias. Figure~\ref{low_new_ALTread} is one of the cases.
 
+\newcommand*{\ExplainRedBracket}{The original reference genome is displayed at top, with a red bracket indicating the variant sequence deleted from our doctored reference}
+
+
 \begin{figure}[H]
-\centering
 \includegraphics[width=1\columnwidth]{body/image/low_new_ALTread.png}
-\caption[New reads in a region with low pile-up read depth]{Example of new reads supporting a variant in a region with low pile-up read depth.}
+\caption[New reads in a region with low pile-up read depth]
+{Example of new reads supporting a variant in a region with low pile-up read depth.
+\ExplainRedBracket.
+}
 \label{low_new_ALTread}
 \end{figure}
 
 Similarly, especially in repetitive genome regions, there are some new reads which are also similar to the reference sequence (Figure \ref{low_new_REFread}).
 
-\vspace{1cm}
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=1\columnwidth]{body/image/low_new_REFread.png}
-    \captionsetup{labelfont=bf}
-    \renewcommand{\baselinestretch}{1.0}
-    \vspace{-1cm}
-    \caption[New reads are similar to the reference with low pile-up read depth]{Example where new reads found are also similar to the reference sequence with low pile-up read depth.  Note the repetitive nature of the surrounding genome sequence.}
-    \label{low_new_REFread}
+\includegraphics[width=1\columnwidth]{body/image/low_new_REFread.png}
+\caption[New reads are similar to the reference with low pile-up read depth]
+{Example where new reads found are also similar to the reference sequence with low pile-up read depth.
+\ExplainRedBracket.
+Note the repetitive nature of the surrounding genome sequence.}
+\label{low_new_REFread}
 \end{figure}
 
 Next, we can look at the comparison of EAGLE log odds ratio.
@@ -156,14 +158,12 @@ Next, we can look at the comparison of EAGLE log odds ratio.
 \end{equation*}
 to represent the effect of our new method on EAGLE candidate variant evaluation.
 
-\vspace{1cm}
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.6\columnwidth]{body/image/low_odds_change.png}
-    \captionsetup{labelfont=bf}
-    \renewcommand{\baselinestretch}{1.0}
-    \caption[low pile-up read depth odds change ratio]{The vertical axis shows the change in EAGLE log odds ratio of variant to reference for indel variants, grouped by length (horizontal axis).  Change here meaning the difference in the log odds ratio when when using the read index versus only using the pile-up.  Plotted for variants from low pile-up read depth regions.}
-    \label{low_odds_change}
+\centering
+\includegraphics[width=0.6\columnwidth]{body/image/low_odds_change.png}
+\caption[low pile-up read depth odds change ratio]
+{The vertical axis shows the change in EAGLE log odds ratio of variant to reference for indel variants, grouped by length (horizontal axis).  Change here means the difference in the log odds ratio when using the read index versus only using the pile-up.  Plotted for variants from low pile-up read depth regions.}
+\label{low_odds_change}
 \end{figure}
 
 In the case of low pile-up read depth, first of all, we can observe that after we add reads, the confidence value of most of the variants increases because we find more reads that contain the variant sequence (Figure \ref{low_odds_change}), and regardless of the length of the indel, their distribution of logs odds ratio change is mostly above zero.
@@ -171,14 +171,11 @@ This may mean that even in the case of low pile-up read depth, our method is ver
 
 Finally, we look at the last row of Table \ref{tab:low-variants-change}, we can see these positions are affected by the reference bias, so that no read can be mapped to these positions to form a pileup. Our method is obviously very helpful. For the remaining variants in the 1,000 variants, we can find those reads that are affected by reference bias and are lost, thereby helping EAGLE evaluate the possibility of these mutations.
 
-\vspace{0.5cm}
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.6\columnwidth]{body/image/low_new_odds.png}
-    \captionsetup{labelfont=bf}
-    \renewcommand{\baselinestretch}{1.0}
-    \caption[no reads with variants from low pile-up depth odds ratio]{The vertical axis shows the EAGLE log odds ratio of variant to reference for indel variants, grouped by length (horizontal axis).  Plotted for variants occurring in regions with no reads from low pile-up depth.}
-    \label{low_new_odds}
+\centering
+\includegraphics[width=0.6\columnwidth]{body/image/low_new_odds.png}
+\caption[no reads with variants from low pile-up depth odds ratio]{The vertical axis shows the EAGLE log odds ratio of variant to reference for indel variants, grouped by length (horizontal axis).  Plotted for variants occurring in regions with no reads from low pile-up depth.}
+\label{low_new_odds}
 \end{figure}
 
 Then see the odds calculated by EAGLE after we find the read (Figure \ref{low_new_odds}), we can see the odds calculated by EAGLE. For most of the variants, EAGLE gives the conclusion the variant occurs at this position, which is also in line with our expected results.
@@ -250,23 +247,29 @@ With the same increase in pile-up read depth, In EAGLE’s initial judgment, the
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\columnwidth]{body/image/mid_new_ALTread.png}
-\caption[New reads in a region with medium pile-up read depth]{Example of new reads supporting a variant in a region with medium pile-up read depth.}
+\caption[New reads in a region with medium pile-up read depth]
+{Example of new reads supporting a variant in a region with medium pile-up read depth.
+\ExplainRedBracket.}
 \label{mid_new_ALTread}
 \end{figure}
 
 \begin{figure}[H]
-\centering
 \includegraphics[width=1\columnwidth]{body/image/mid_new_REFread.png}
-\caption[New reads are similar to the reference with medium pile-up read depth]{Example where new reads found are also similar to the reference sequence with medium pile-up read depth.  Note the repetitive nature of the surrounding genome sequence.}
+\caption[New reads are similar to the reference with medium pile-up read depth]
+{Example where new reads found are also similar to the reference sequence with medium pile-up read depth.
+\ExplainRedBracket.
+Note the repetitive nature of the surrounding genome sequence.}
 \label{mid_new_REFread}
 \end{figure}
 
 We can find that in bad cases, although we found reads similar to hypothetical variant sequences, we did not improve the score of EAGLE on variants. In these few examples, we found that their mutated sequences happened to be repeated sequences. Therefore, the similarity between it and the reference sequence is also very high (Figure \ref{mid_pileup_REFread}).
 
+
 \begin{figure}[H]
-\centering
 \includegraphics[width=1\columnwidth]{body/image/mid_pileup_REFread.png}
-\caption[pileup with Figure \ref{mid_new_REFread}]{pileup with Figure \ref{mid_new_REFread}.}
+\caption[pileup with Figure~\ref{mid_new_REFread}]
+{The pile-up of reads aligned to the doctored genome for the variant from Figure~\ref{mid_new_REFread}.
+At top, the doctored reference genome is shown with an arrow indicating where the simulated variant sequence was deleted from the original reference.}
 \label{mid_pileup_REFread}
 \end{figure}
 
@@ -284,27 +287,29 @@ We can also see that indels with a length of 10 or more on our box plot have Q3 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.6\columnwidth]{body/image/mid_new_odds.png}
-\caption[no reads with variants from medium pile-up depth odds ratio]{The vertical axis shows the EAGLE log odds ratio of variant to reference for indel variants, grouped by length (horizontal axis).  Plotted for variants occurring in regions with no reads from medium pile-up depth.}
+\caption[no reads with variants from medium pile-up depth odds ratio]
+{The vertical axis shows the EAGLE log odds ratio of variant to reference for indel variants, grouped by length (horizontal axis).  Plotted for variants occurring in regions with no reads from medium pile-up depth.}
 \label{mid_new_odds}
 \end{figure}
 
 
 Finally, we look at the last row of Table~\ref{tab:mid-variants} we can see that our method still can help some variants that EAGLE cannot calculate because there is no pileup at the position. Figure~\ref{mid_new_odds} shows these variant odds calculated by EAGLE.
 
-In this case, EAGLE can get more correct conclusions, that is, the position does contain variants, because we can find more read support variants. It can be seen that compared to the previous case, regardless of the length of the indel, their Q3 is 0 some distance higher, this result is also as we predicted (for example see Figure~\ref{mid_new_pileup}).
+In this case, EAGLE can make more correct conclusions (that the position does contain variants) because we can find reads supporting the variants. It can be seen that compared to the previous case, regardless of the length of the indel, their Q3 is some distance higher, this result is also as we predicted (for example see Figure~\ref{mid_new_pileup}).
 
 
 \begin{figure}[H]
-\centering
 \includegraphics[width=1\columnwidth]{body/image/mid_new_pileup.png}
-\caption[find new pileup reads in medium pile-up read depth]{find reads on no pileup position.}
+\caption[find new pileup reads in medium pile-up read depth]
+{Reads found via the read-index are shown for a position for which standard read mapping to the doctored reference found no matching reads (an empty pile-up).
+At top, the original reference genome sequence is shown.}
 \label{mid_new_pileup}
 \end{figure}
 
 \section{Case 3: High pile-up read depth}
 \begin{table}[ht]
     \centering
-    \caption[high pile-up read depth variants]{high pile-up read depth variants}
+    \caption[High pile-up read depth variants]{High pile-up read depth variants}
     \vspace{-0.5cm}
     \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|r|}
     \hline
@@ -337,10 +342,8 @@ In this case, EAGLE can get more correct conclusions, that is, the position does
     279\\ \hline
     \end{tabular}
     \label{tab:hi-variants}
-    %\tabfnt
-    {Note: Explain that in the case of high pile-up read depth, after we add read, EAGLE evaluates the number of variants affected.}
 \end{table}
-\vspace{1cm}
+
 
 Basically, in this case, we will observe results that are very similar to medium pile-up read depth, that's because there are quite a lot of reads, most positions can still produce pileup (Table \ref{tab:hi-variants}).
 
@@ -362,19 +365,21 @@ Basically, in this case, we will observe results that are very similar to medium
     \label{tab:hi-variants-change}
 \end{table}
 
-Interestingly, here we observe that the pile-up read depth rate is twice as high as that of the medium pile-up read depth, EAGLE initially judged that the position does not contain variation, but through our method we can complete more corrections than the medium pile-up read depth case. There are nearly 97\% of variants in Table \ref{tab:hi-variants-change} have been changed to the correct situation. (Fig \ref{hi_new_REFread},\ref{hi_pileup_REFread} are some examples)
+Interestingly, here we observe that the pile-up read depth rate is twice as high as that of the medium pile-up read depth, EAGLE initially judged that the position does not contain variation, but through our method we can complete more corrections than the medium pile-up read depth case. There are nearly 97\% of variants in Table \ref{tab:hi-variants-change} have been changed to the correct situation. (Figures \ref{hi_new_REFread},\ref{hi_pileup_REFread} show some examples)
 
 \begin{figure}[H]
-\centering
 \includegraphics[width=1\columnwidth]{body/image/hi_new_REFread.png}
-\caption[New reads in a region with high pile-up read depth]{Example of find large amount new reads supporting a variant in a region with high pile-up read depth.}
+\caption[New reads in a region with high pile-up read depth]%
+{Example of find large amount new reads supporting a variant in a region with high pile-up read depth.
+\ExplainRedBracket.}
 \label{hi_new_REFread}
 \end{figure}
 
 \begin{figure}[H]
-\centering
 \includegraphics[width=1\columnwidth]{body/image/hi_pileup_REFread.png}
-\caption[variant pileup in high pile-up read depth]{Pileup after adding reads.}
+\caption[variant pileup in high pile-up read depth]
+{Pileup after adding reads to high pile-up depth region.
+At top, the doctored reference genome is shown with an arrow indicating where the simulated variant sequence was deleted from the original reference.}
 \label{hi_pileup_REFread}
 \end{figure}
 
@@ -387,7 +392,7 @@ Then, we look at the comparison of EAGLE odds in high pile-up read depth (Figure
 \label{hi_odds_change}
 \end{figure}
 
-Finally, we look at the last row of Table\ref{tab:hi-variants}, we can see the same result as the previous case medium pile-up read depth. Figure\ref{hi_odds_change} shows these variant odds calculated by EAGLE.
+Finally, we look at the last row of Table~\ref{tab:hi-variants}, we can see the same result as the previous case medium pile-up read depth. Figure~\ref{hi_odds_change} shows these variant odds calculated by EAGLE.
 
 \begin{figure}[H]
 \centering
@@ -399,34 +404,30 @@ Finally, we look at the last row of Table\ref{tab:hi-variants}, we can see the s
 
 \section{SNPs in dbSNP dataset}
 
-There are 15,936,832 SNP variants form the dpSNP dataset, we random select 100,000 variants from the dataset, and the amount of matching pileup of the querying SNP variants are 50488. After joining our method, there are 22995 variants that have been changed as a result, we have looked at a few cases (Figure \ref{snp_new_ALTread},\ref{snp_pileup_ALTread},\ref{snp_new_REFread},\ref{snp_pileup_REFread}), we find many sequences that include the variants.
+There are 15,936,832 SNP variants form the dbSNP dataset, we random select 100,000 variants from the dataset, and the amount of matching pileup of the querying SNP variants are 50488. After joining our method, there are 22995 variants that have been changed as a result, we have looked at a few cases (Figure \ref{snp_new_ALTread},\ref{snp_pileup_ALTread},\ref{snp_new_REFread},\ref{snp_pileup_REFread}), we find many sequences that include the variants.
 
 
 \begin{figure}[H]
-\centering
 \includegraphics[width=1\columnwidth]{body/image/snp_new_ALTread.png}
-\caption[SNP match reads]{ found match reads with hypothetical sequence in SNP.}
+\caption[SNP match reads]{Reads found via the read-index are shown for a SNP in dbSNP.}
 \label{snp_new_ALTread}
 \end{figure}
 
 \begin{figure}[H]
-\centering
 \includegraphics[width=1\columnwidth]{body/image/snp_pileup_ALTread.png}
-\caption[Figure 4.17 pileup]{ The pileup corresponding to the Figure 4-17 variants.}
+\caption[Figure~\ref{snp_new_ALTread} pileup]{The pileup corresponding to the Figure~\ref{snp_new_ALTread} candidate variant.}
 \label{snp_pileup_ALTread}
 \end{figure}
 
 \begin{figure}[H]
-\centering
 \includegraphics[width=1\columnwidth]{body/image/snp_new_REFread.png}
-\caption[SNP worse match reads]{ found match reads but more similar to reference sequence in SNP.}
+\caption[SNP worse match reads]{Reads found via the read-index are shown for a SNP in dbSNP.  In this particular case, those reads actually match the reference genome better.}
 \label{snp_new_REFread}
 \end{figure}
 
 \begin{figure}[H]
-\centering
 \includegraphics[width=1\columnwidth]{body/image/snp_pileup_REFread.png}
-\caption[SNP worse match reads pileup]{The pileup corresponding to the Figure 4-19 variants.}
+\caption[SNP worse match reads pileup]{The pileup corresponding to the Figure~\ref{snp_new_REFread} candidate variant.}
 \label{snp_pileup_REFread}
 \end{figure}
 
@@ -441,7 +442,7 @@ And we can find that the read we found gives EAGLE more basis for judgment, but 
 
 \section{INDELs in dbSNP dataset}
 
-There are 1,759,193 INDEL variants form the dpSNP dataset, we random select 10,000 variants from the dataset, and the amount of matching pileup of the querying INDEL variants are 5093. After using our new method, there are 2482 variants that have been changed as a result.  We have looked at a few cases  (Figure \ref{indel_new_ALTread},\ref{indel_pileup_ALTread},\ref{indel_new_REFread},\ref{indel_pileup_REFread}).
+There are 1,759,193 INDEL variants form the dbSNP dataset, we random select 10,000 variants from the dataset, and the amount of matching pileup of the querying INDEL variants are 5093. After using our new method, there are 2482 variants that have been changed as a result.  We have looked at a few cases (Figures~\ref{indel_new_ALTread},\ref{indel_pileup_ALTread},\ref{indel_new_REFread},\ref{indel_pileup_REFread}).
 
 \begin{figure}[H]
 \centering
@@ -482,7 +483,7 @@ It can be seen that the reads we found gave EAGLE more evidence for judgment, an
 
 \section{Execution time and memory consumption}
 
-Finally, let’s discuss our execution time and memory consumption, our test data are as follows Table\ref{tab:dataset}, test environment as Figure \ref{environment}.
+Finally, let’s discuss our execution time and memory consumption, our test data are as follows Table~\ref{tab:dataset}, test environment as Figure~\ref{environment}.
 
 \begin{table}[ht]
     \centering
