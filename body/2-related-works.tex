@@ -7,12 +7,12 @@ BWA-MEM first needs to build the FM-index \cite{ferragina2005indexing} for the r
 
 Then in the core alignment algorithm, BWA-MEM uses the seed-and-extend paradigm, and the process can be roughly divided into four steps. First step is seed, seed is found through super maximal exact matches (SMEM). Seconded step is re-seeding, in order to reduce the misalignment caused by missing seeds. Third step is chaining and filtering, chaining the seeds those are collinear and closed each other as a chain, and filter overlapped or short chain. Forth step seed extension, extending the seed in the chain to achieve the final exact match region.
 \section{EAGLE: Explicit Alternative Genome Likelihood Evaluator}
-EAGLE \cite{kuo2018eagle} is our previous research, based on a generative probabilistic model, variant calling evaluator, EAGLE main function is given individual sequencing data (exome or whole genome sequencing) and a list of candidate variants, and returns a likelihood score of each candidate variants.
+EAGLE~\cite{kuo2018eagle} is our previous research, based on a generative probabilistic model, variant calling evaluator, EAGLE main function is given individual sequencing data (exome or whole genome sequencing) and a list of candidate variants, and returns a likelihood score of each candidate variants.
 The concept of EAGLE is that in the process of executing variant calling, there will be many uncertain factors, such as the error rate of alignment, low coverage sequencing and error rate of base-calling, etc., and these will affect downstream analysis. And EAGLE handles these possible errors and uncertainties through generative probabilistic model  (Figure~\ref{eagle_model}).
 \begin{figure}[ht]
 \center
 \includegraphics[width=0.6\columnwidth]{body/image/eagle_model.png}
-\caption[EAGLE model]{EAGLE\cite{kuo2018eagle}  a use generative probabilistic model to handle uncertainty.}
+\caption[EAGLE model]{EAGLE uses a generative probabilistic model to handle uncertainty.}
 \label{eagle_model}
 \end{figure}
 
